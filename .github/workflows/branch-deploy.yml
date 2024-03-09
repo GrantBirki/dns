@@ -75,3 +75,9 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+
+      - name: update deploy comment
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        env:
+          MSG: ${{ steps.octodns.outputs.plan }}
+        run: sed -i "s/<%= results %>/${MSG}/g" .github/deployment_message.md
