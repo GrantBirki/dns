@@ -60,9 +60,11 @@ jobs:
         run: |
           if [ "${{ steps.branch-deploy.outputs.noop }}" == "true" ]; then
             echo "doit=false" >> $GITHUB_OUTPUT
+            echo "force=Yes" >> $GITHUB_OUTPUT
             echo "this is a noop deployment"
           else
             echo "doit=--doit" >> $GITHUB_OUTPUT
+            echo "force=No" >> $GITHUB_OUTPUT
             echo "this is a deployment"
           fi
         
@@ -72,6 +74,7 @@ jobs:
         with:
           config_path: production.yaml
           doit: ${{ steps.noop-check.outputs.doit }}
+          force: ${{ steps.noop-check.outputs.force }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
