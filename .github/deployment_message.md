@@ -8,8 +8,6 @@
 
 <details><summary>Show Results</summary>
 
-```text
 [[ results ]]
-```
 
 </details>
