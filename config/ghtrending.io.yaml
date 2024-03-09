@@ -4,7 +4,7 @@
       cloudflare:
         proxied: true
         auto-ttl: true
-    type: CNAME
+    type: ALIAS
     value: ghtrending.pages.dev.
   - octodns:
       cloudflare:
