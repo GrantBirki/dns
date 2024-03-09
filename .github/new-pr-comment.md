@@ -10,3 +10,5 @@ Here is a trimmed down summary of the deployment process:
     > If anything goes wrong, rollback with `.deploy main`
 
 1. 🎉 Merge!
+
+> Note: you can use `.deploy | FORCE=true` to force deploy changes
