@@ -1,2 +1,3 @@
 # dns
-My personal DNS management through octocerts
+
+My personal DNS management through octodns
