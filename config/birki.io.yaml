@@ -1,0 +1,46 @@
+---
+"":
+  - type: ALIAS
+    value: ghtrending.pages.dev.
+    octodns:
+      cloudflare:
+        proxied: true
+        auto-ttl: true
+
+  - type: MX
+    values:
+      - exchange: route3.mx.cloudflare.net.
+        preference: 5
+      - exchange: route2.mx.cloudflare.net.
+        preference: 82
+      - exchange: route1.mx.cloudflare.net.
+        preference: 95
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+  - type: TXT
+    values:
+      - v=spf1 include:_spf.mx.cloudflare.net ~all
+      - google-site-verification=MDJ0aMnhpJc7hbCnUs8z0jbizoNXorxW7Q13FenzOpU
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+ingest:
+  - type: A
+    value: 20.172.212.22
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+data:
+  - type: CNAME
+    value: data.ghtrending.io.s3-website-us-east-1.amazonaws.com.
+    octodns:
+      cloudflare:
+        proxied: true
+        auto-ttl: true
