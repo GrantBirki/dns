@@ -24,6 +24,7 @@
     values:
       - v=spf1 include:_spf.mx.cloudflare.net ~all
       - google-site-verification=MDJ0aMnhpJc7hbCnUs8z0jbizoNXorxW7Q13FenzOpU
+      - test
     octodns:
       cloudflare:
         proxied: false
