@@ -81,5 +81,5 @@ jobs:
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
         run: |
-          sed -i "s/<%= results %>/${MSG}/g" .github/deployment_message.md
+          sed -i "" "s|||||<%= results %>|||||${MSG}|||||" .github/deployment_message.md
           cat .github/deployment_message.md
