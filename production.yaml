@@ -1,0 +1,46 @@
+---
+providers:
+  config:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./config
+    default_ttl: 3600
+    enforce_order: false
+
+  cloudflare:
+    class: octodns_cloudflare.CloudflareProvider
+    # Required permissions for API Tokens are Zone:Read, DNS:Read and DNS:Edit.
+    # Page Rules:Edit is required for managing Page Rules (URLFWD) records.
+    token: env/CLOUDFLARE_TOKEN
+    # Optional. Filter by account ID in environments where a token has access
+    # across more than the permitted number of accounts allowed by Cloudflare.
+    account_id: env/CLOUDFLARE_ACCOUNT_ID
+    # Manage Page Rules (URLFWD) records
+    pagerules: false # disabled for now by me
+    # Optional. Default: 4. Number of times to retry if a 429 response
+    # is received.
+    retry_count: 10
+    # Optional. Default: 300. Number of seconds to wait before retrying.
+    retry_period: 300
+    # Optional. Default: 50. Number of zones per page.
+    zones_per_page: 50
+    # Optional. Default: 100. Number of dns records per page.
+    records_per_page: 100
+    # Optional. Default: 120. Lowest TTL allowed to be set.
+    # A different limit for (non-)enterprise zone applies.
+    # See: https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl
+    min_ttl: 120
+
+manager:
+  plan_outputs:
+    html:
+      class: octodns.provider.plan.PlanHtml
+
+zones:
+  # This is a dynamic zone config. The source(s), here `config`, will be
+  # queried for a list of zone names and each will dynamically be set up to
+  # match the dynamic entry.
+  "*":
+    sources:
+      - config
+    targets:
+      - cloudflare
