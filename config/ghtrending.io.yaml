@@ -1,16 +1,13 @@
 ---
 ? ''
-: - octodns:
+: - type: ALIAS
+    value: ghtrending.pages.dev.
+    octodns:
       cloudflare:
         proxied: true
         auto-ttl: true
-    type: ALIAS
-    value: ghtrending.pages.dev.
-  - octodns:
-      cloudflare:
-        proxied: false
-        auto-ttl: true
-    type: MX
+
+  - type: MX
     values:
       - exchange: route3.mx.cloudflare.net.
         preference: 5
@@ -18,27 +15,32 @@
         preference: 82
       - exchange: route1.mx.cloudflare.net.
         preference: 95
-  - octodns:
+    octodns:
       cloudflare:
         proxied: false
         auto-ttl: true
-    type: TXT
+    
+  - type: TXT
     values:
       - v=spf1 include:_spf.mx.cloudflare.net ~all
       - google-site-verification=MDJ0aMnhpJc7hbCnUs8z0jbizoNXorxW7Q13FenzOpU
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
 
 ingest:
-  octodns:
-    cloudflare:
-      proxied: false
-      auto-ttl: true
-  type: A
-  value: 20.172.212.22
+  - type: A
+    value: 20.172.212.22
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
 
 data:
-  octodns:
-    cloudflare:
-      proxied: true
-      auto-ttl: true
-  type: CNAME
-  value: data.ghtrending.io.s3-website-us-east-1.amazonaws.com.
+  - type: CNAME
+    value: data.ghtrending.io.s3-website-us-east-1.amazonaws.com.
+    octodns:
+      cloudflare:
+        proxied: true
+        auto-ttl: true
