@@ -52,28 +52,32 @@ jobs:
         if: steps.branch-deploy.outputs.continue == 'true'
         run: pip install -r requirements.txt
         
-      # production deployment - noop only
-      - uses: grantbirki/octodns-action@v1
-        if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
-        with:
-          config_path: production.yaml
-          doit: ''
-          add_pr_comment: 'Yes'
-          pr_comment_token: ${{ github.token }}
-          comments_url: "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+      # noop deployment
+      - name: noop-check
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        id: noop-check
+        # set the doit environment variable based on the value of noop (true or false)
+        run: |
+          if [ "${{ steps.branch-deploy.outputs.noop }}" == "true" ]; then
+            echo "doit=false" >> $GITHUB_OUTPUT
+          else
+            echo "doit=--doit" >> $GITHUB_OUTPUT
+          fi
+        
     
       # production deployment - non-noop
       - uses: grantbirki/octodns-action@v1
+        id: octodns
         if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
         with:
           config_path: production.yaml
-          doit: '--doit'
-          add_pr_comment: 'Yes'
-          pr_comment_token: ${{ github.token }}
-          comments_url: "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
+          doit: ${{ steps.noop-check.outputs.doit }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+
+      - name: update deploy comment
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        env:
+          MSG: ${{ steps.octodns.outputs.plan }}
+        run: sed -i "s/<%= results %>/${MSG}/g" .github/deployment_message.md
