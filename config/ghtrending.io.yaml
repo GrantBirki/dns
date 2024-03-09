@@ -1,6 +1,6 @@
 ---
-? ''
-: - type: ALIAS
+"":
+  - type: ALIAS
     value: ghtrending.pages.dev.
     octodns:
       cloudflare:
@@ -19,7 +19,7 @@
       cloudflare:
         proxied: false
         auto-ttl: true
-    
+
   - type: TXT
     values:
       - v=spf1 include:_spf.mx.cloudflare.net ~all
