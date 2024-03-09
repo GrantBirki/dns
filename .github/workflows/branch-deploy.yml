@@ -60,15 +60,15 @@ jobs:
         run: |
           if [ "${{ steps.branch-deploy.outputs.noop }}" == "true" ]; then
             echo "doit=false" >> $GITHUB_OUTPUT
+            echo "this is a noop deployment"
           else
             echo "doit=--doit" >> $GITHUB_OUTPUT
+            echo "this is a deployment"
           fi
         
-    
-      # production deployment - non-noop
       - uses: grantbirki/octodns-action@v1
         id: octodns
-        if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
           config_path: production.yaml
           doit: ${{ steps.noop-check.outputs.doit }}
@@ -80,4 +80,6 @@ jobs:
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
-        run: sed -i "s/<%= results %>/${MSG}/g" .github/deployment_message.md
+        run: |
+          sed -i "s/<%= results %>/${MSG}/g" .github/deployment_message.md
+          cat .github/deployment_message.md
