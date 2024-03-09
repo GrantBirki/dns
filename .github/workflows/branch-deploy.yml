@@ -81,5 +81,4 @@ jobs:
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
         run: |
-          python script/ci/update_deploy_msg.py > .github/deployment_message.md
-          cat .github/deployment_message.md
+          python script/ci/update_deploy_msg.py
