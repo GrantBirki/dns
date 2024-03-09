@@ -80,4 +80,6 @@ jobs:
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
-        run: python script/ci/update_deploy_msg.py > .github/deployment_message.md
+        run: |
+          python script/ci/update_deploy_msg.py > .github/deployment_message.md
+          cat .github/deployment_message.md
