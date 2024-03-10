@@ -4,6 +4,8 @@
 
 DNS management through [octodns](https://github.com/octodns/octodns)
 
+![octopus](docs/assets/octopus.png)
+
 ## About 💡
 
 This repository is used to manage DNS records for various domains. `octodns` is used to manage all DNS records through Infrastructure as Code (IaC) principles. The [github/branch-deploy](https://github.com/github/branch-deploy) is responsible for deploying changes to production.
