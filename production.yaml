@@ -29,6 +29,10 @@ providers:
     # A different limit for (non-)enterprise zone applies.
     # See: https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl
     min_ttl: 120
+    # how many records can be updated at once without .deploy | FORCE=true
+    update_pcent_threshold: 0.4
+    # # how many records can be deleted at once without .deploy | FORCE=true
+    delete_pcent_threshold: 0.4
 
 manager:
   plan_outputs:
