@@ -212,3 +212,10 @@ _atproto:
         auto-ttl: true
     values:
       - did=did:plc:rm7todfgrrgavltccx4s767a
+
+example:
+  - type: TX
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    value: hello world
