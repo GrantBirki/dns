@@ -68,6 +68,9 @@ journal:
         proxied: false
         auto-ttl: true
   - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
     values:
       - google-site-verification=lgROPFdmL2c0yshIYt2Z59pTMdMuW4Nyh7JskybsdRA
 
@@ -80,6 +83,9 @@ blog:
         proxied: true
         auto-ttl: true
   - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
     values:
       - google-site-verification=OBOQr1pzs9BOLCKXbQt2SGjQezHUfIJMww_s8Dx69oQ
 
@@ -189,8 +195,20 @@ secret:
         proxied: false
         auto-ttl: true
 
+# https://github.com/GrantBirki/edf
+edf:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
 # bluesky handle verification
 _atproto:
   - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
     values:
       - did=did:plc:rm7todfgrrgavltccx4s767a
