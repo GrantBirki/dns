@@ -1,0 +1,214 @@
+---
+"":
+  - type: A
+    values:
+      - 185.199.108.153
+      - 185.199.109.153
+      - 185.199.110.153
+      - 185.199.111.153
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+  - type: MX
+    values:
+      - exchange: route3.mx.cloudflare.net.
+        preference: 37
+      - exchange: route2.mx.cloudflare.net.
+        preference: 83
+      - exchange: route1.mx.cloudflare.net.
+        preference: 48
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+  - type: TXT
+    values:
+      - v=spf1 include:_spf.mx.cloudflare.net ~all
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# www redirect to the root/apex domain
+www:
+  - type: CNAME
+    value: birki.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/ingress
+ingress:
+  - type: A
+    value: 135.148.148.174
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/ghostfolio
+money:
+  - type: A
+    value: 135.148.148.174
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/journal
+journal:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+  - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    values:
+      - google-site-verification=lgROPFdmL2c0yshIYt2Z59pTMdMuW4Nyh7JskybsdRA
+
+# https://github.com/GrantBirki/blog
+blog:
+  - type: CNAME
+    value: blog-birki-io.pages.dev.
+    octodns:
+      cloudflare:
+        proxied: true
+        auto-ttl: true
+  - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    values:
+      - google-site-verification=OBOQr1pzs9BOLCKXbQt2SGjQezHUfIJMww_s8Dx69oQ
+
+# https://github.com/GrantBirki/bean-quest
+bean-quest:
+  - type: CNAME
+    value: phenomenal-quokka-fbc052.netlify.app.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+beam:
+  - type: CNAME
+    value: cname.vercel-dns.com.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/astrowind
+astro-demo:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/astro-portfolio
+astro-portfolio:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/eco
+eco:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/errbot
+errbot:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/europe
+europe:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/gl
+gl:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/image
+image:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+img:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/leahcaragol/leah
+leah:
+  - type: CNAME
+    value: leahcaragol.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/portable-secret
+secret:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/edf
+edf:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# bluesky handle verification
+_atproto:
+  - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    values:
+      - did=did:plc:rm7todfgrrgavltccx4s767a

@@ -29,6 +29,10 @@ providers:
     # A different limit for (non-)enterprise zone applies.
     # See: https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl
     min_ttl: 120
+    # how many records can be updated at once without .deploy | FORCE=true
+    update_pcent_threshold: 0.4
+    # # how many records can be deleted at once without .deploy | FORCE=true
+    delete_pcent_threshold: 0.4
 
 manager:
   plan_outputs:
@@ -40,6 +44,17 @@ zones:
   # queried for a list of zone names and each will dynamically be set up to
   # match the dynamic entry.
   "*":
+    sources:
+      - config
+    targets:
+      - cloudflare
+
+  # NOTES:
+  # 1: `lenient: true` must be set as there are CNAME records that also have TXT records
+  # https://github.com/octodns/octodns/issues/1143
+  # This is because cloudflare is "not legal DNS spec-wise for a CNAME to coexist at the same node with other records"
+  "birki.io.":
+    lenient: true
     sources:
       - config
     targets:
