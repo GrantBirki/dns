@@ -48,3 +48,14 @@ zones:
       - config
     targets:
       - cloudflare
+
+  # NOTES:
+  # 1: `lenient: true` must be set as there are CNAME records that also have TXT records
+  # https://github.com/octodns/octodns/issues/1143
+  # This is because cloudflare is "not legal DNS spec-wise for a CNAME to coexist at the same node with other records"
+  "birki.io.":
+    lenient: true
+    sources:
+      - config
+    targets:
+      - cloudflare

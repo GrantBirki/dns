@@ -1,9 +1,3 @@
-# NOTES:
-
-# 1: `lenient: true` must be set for CNAME records that also have TXT records
-# https://github.com/octodns/octodns/issues/1143
-# This is because cloudflare is "not legal DNS spec-wise for a CNAME to coexist at the same node with other records"
-
 ---
 "":
   - type: A
@@ -67,35 +61,25 @@ money:
 
 # https://github.com/GrantBirki/journal
 journal:
-  - octodns:
-    lenient: true
   - type: CNAME
     value: grantbirki.github.io.
     octodns:
-      lenient: true
       cloudflare:
         proxied: false
         auto-ttl: true
   - type: TXT
-    octodns:
-      lenient: true
     values:
       - google-site-verification=lgROPFdmL2c0yshIYt2Z59pTMdMuW4Nyh7JskybsdRA
 
 # https://github.com/GrantBirki/blog
 blog:
-  - octodns:
-    lenient: true
   - type: CNAME
     value: blog-birki-io.pages.dev.
     octodns:
-      lenient: true
       cloudflare:
         proxied: true
         auto-ttl: true
   - type: TXT
-    octodns:
-      lenient: true
     values:
       - google-site-verification=OBOQr1pzs9BOLCKXbQt2SGjQezHUfIJMww_s8Dx69oQ
 
