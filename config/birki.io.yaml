@@ -75,6 +75,8 @@ journal:
         proxied: false
         auto-ttl: true
   - type: TXT
+    octodns:
+      lenient: true
     values:
       - google-site-verification=lgROPFdmL2c0yshIYt2Z59pTMdMuW4Nyh7JskybsdRA
 
@@ -88,6 +90,8 @@ blog:
         proxied: true
         auto-ttl: true
   - type: TXT
+    octodns:
+      lenient: true
     values:
       - google-site-verification=OBOQr1pzs9BOLCKXbQt2SGjQezHUfIJMww_s8Dx69oQ
 
