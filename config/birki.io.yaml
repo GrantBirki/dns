@@ -59,6 +59,7 @@ money:
         proxied: false
         auto-ttl: true
 
+# https://github.com/GrantBirki/journal
 journal:
   - type: CNAME
     value: grantbirki.github.io.
@@ -70,6 +71,7 @@ journal:
     values:
       - google-site-verification=lgROPFdmL2c0yshIYt2Z59pTMdMuW4Nyh7JskybsdRA
 
+# https://github.com/GrantBirki/blog
 blog:
   - type: CNAME
     value: blog-birki-io.pages.dev.
