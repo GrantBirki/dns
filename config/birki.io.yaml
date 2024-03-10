@@ -214,7 +214,7 @@ _atproto:
       - did=did:plc:rm7todfgrrgavltccx4s767a
 
 example:
-  - type: TX
+  - type: TXT
     octodns:
       cloudflare:
         auto-ttl: true
