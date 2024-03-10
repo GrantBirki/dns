@@ -67,6 +67,8 @@ money:
 
 # https://github.com/GrantBirki/journal
 journal:
+  - octodns:
+    lenient: true
   - type: CNAME
     value: grantbirki.github.io.
     octodns:
@@ -82,6 +84,8 @@ journal:
 
 # https://github.com/GrantBirki/blog
 blog:
+  - octodns:
+    lenient: true
   - type: CNAME
     value: blog-birki-io.pages.dev.
     octodns:
