@@ -1,0 +1,44 @@
+---
+"":
+  - type: A
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    ttl: 300
+    values:
+      - 185.199.108.153
+      - 185.199.109.153
+      - 185.199.110.153
+      - 185.199.111.153
+  - type: MX
+    values:
+      - exchange: aspmx.l.google.com.
+        preference: 1
+      - exchange: alt1.aspmx.l.google.com.
+        preference: 5
+      - exchange: alt2.aspmx.l.google.com.
+        preference: 5
+      - exchange: alt3.aspmx.l.google.com.
+        preference: 10
+      - exchange: alt4.aspmx.l.google.com.
+        preference: 10
+  - type: TXT
+    values:
+      - google-site-verification=12tsato1H6YJFtEbEP8gL1UDZjNEoTyc88JkZEjcKII
+      - v=spf1 include:_spf.google.com -all
+
+_github-challenge-caragolfoundation-org:
+  octodns:
+    cloudflare:
+      auto-ttl: true
+  ttl: 300
+  type: TXT
+  value: 7ad012b0ae
+
+www:
+  octodns:
+    cloudflare:
+      auto-ttl: true
+  ttl: 300
+  type: CNAME
+  value: caragolfoundation.github.io.
