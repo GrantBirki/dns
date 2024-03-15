@@ -212,6 +212,12 @@ tgct:
       cloudflare:
         proxied: false
         auto-ttl: true
+  - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    values:
+      - google-site-verification=-avocX7kXDkXqG8jMPeAJ_fbp8gh0RbjJYwDRKXGKMU
 
 # bluesky handle verification
 _atproto:
