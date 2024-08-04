@@ -227,3 +227,21 @@ _atproto:
         auto-ttl: true
     values:
       - did=did:plc:rm7todfgrrgavltccx4s767a
+
+# https://github.com/GrantBirki/ghtrending
+ghtrending:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# https://github.com/GrantBirki/ghtrending
+ghtrendingdata:
+  - type: CNAME
+    value: data.ghtrending.io.s3-website-us-east-1.amazonaws.com.
+    octodns:
+      cloudflare:
+        proxied: true
+        auto-ttl: true
