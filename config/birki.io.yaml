@@ -232,6 +232,7 @@ _atproto:
 ghtrending:
   - type: CNAME
     value: ghtrending-birki-io.pages.dev.
+    ttl: 300
     octodns:
       cloudflare:
         proxied: false
