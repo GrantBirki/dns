@@ -241,7 +241,7 @@ ghtrending:
 # https://github.com/GrantBirki/ghtrending
 ghtrendingdata:
   - type: CNAME
-    value: data.ghtrending.io.s3-website-us-east-1.amazonaws.com.
+    value: ghtrendingdata.birki.io.s3-website-us-east-1.amazonaws.com.
     octodns:
       cloudflare:
         proxied: true
