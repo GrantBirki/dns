@@ -231,7 +231,7 @@ _atproto:
 # https://github.com/GrantBirki/ghtrending
 ghtrending:
   - type: CNAME
-    value: grantbirki.github.io.
+    value: ghtrending-birki-io.pages.dev.
     octodns:
       cloudflare:
         proxied: false
