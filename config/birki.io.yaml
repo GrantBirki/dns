@@ -50,15 +50,6 @@ ingress:
         proxied: false
         auto-ttl: true
 
-# https://github.com/GrantBirki/ghostfolio
-money:
-  - type: A
-    value: 135.148.148.174
-    octodns:
-      cloudflare:
-        proxied: false
-        auto-ttl: true
-
 # https://github.com/GrantBirki/journal
 journal:
   - type: CNAME
@@ -93,14 +84,6 @@ blog:
 bean-quest:
   - type: CNAME
     value: phenomenal-quokka-fbc052.netlify.app.
-    octodns:
-      cloudflare:
-        proxied: false
-        auto-ttl: true
-
-beam:
-  - type: CNAME
-    value: cname.vercel-dns.com.
     octodns:
       cloudflare:
         proxied: false
@@ -227,22 +210,3 @@ _atproto:
         auto-ttl: true
     values:
       - did=did:plc:rm7todfgrrgavltccx4s767a
-
-# https://github.com/GrantBirki/ghtrending
-ghtrending:
-  - type: CNAME
-    value: ghtrending-birki-io.pages.dev.
-    ttl: 300
-    octodns:
-      cloudflare:
-        proxied: true
-        auto-ttl: true
-
-# https://github.com/GrantBirki/ghtrending
-ghtrendingdata:
-  - type: CNAME
-    value: ghtrendingdata.birki.io.s3-website-us-east-1.amazonaws.com.
-    octodns:
-      cloudflare:
-        proxied: true
-        auto-ttl: true
