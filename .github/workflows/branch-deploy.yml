@@ -109,4 +109,4 @@ jobs:
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
         run: |
-          python script/ci/update_deploy_msg.py
+          poetry run python script/ci/update_deploy_msg.py
