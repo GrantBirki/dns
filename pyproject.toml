@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "dns"
+version = "0.0.0"
+description = "DNS management through octodns"
+authors = ["GrantBirki <grant.birkinbine@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "==3.13.1"
+octodns = "^1.10.0"
+octodns-cloudflare = "^0.0.7"
+jinja2 = "^3.1.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

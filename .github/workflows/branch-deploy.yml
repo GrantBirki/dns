@@ -2,7 +2,7 @@ name: branch-deploy
 
 on:
   issue_comment:
-    types: [ created ]
+    types: [created]
 
 # Permissions needed for reacting and adding comments for IssueOps commands
 permissions:
@@ -10,6 +10,7 @@ permissions:
   deployments: write
   contents: write
   checks: read
+  statuses: read
 
 jobs:
   branch-deploy:
@@ -27,7 +28,7 @@ jobs:
     steps:
       - name: branch-deploy
         id: branch-deploy
-        uses: github/branch-deploy@v9
+        uses: github/branch-deploy@v10
         with:
           trigger: ".deploy"
           environment: production
@@ -40,18 +41,21 @@ jobs:
         if: steps.branch-deploy.outputs.continue == 'true'
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.branch-deploy.outputs.ref }}
+          ref: ${{ steps.branch-deploy.outputs.sha }}
+
+      - name: install poetry
+        if: steps.branch-deploy.outputs.continue == 'true'
+        run: pipx install poetry
 
       - uses: actions/setup-python@v5
         if: steps.branch-deploy.outputs.continue == 'true'
         with:
-          python-version: '3.10'
-          cache: 'pip'
-            
-      - name: install requirements
+          cache: "poetry"
+
+      - name: install dependencies
         if: steps.branch-deploy.outputs.continue == 'true'
-        run: pip install -r requirements.txt
-        
+        run: poetry install
+
       - name: force-check
         id: force-check
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
@@ -72,7 +76,6 @@ jobs:
             echo "force=Yes" >> $GITHUB_OUTPUT
             echo "force flag set by default for noop deploys"
           fi
-          
 
       # noop deployment
       # force is always set to true for noop deploys
@@ -88,7 +91,7 @@ jobs:
             echo "doit=--doit" >> $GITHUB_OUTPUT
             echo "this is a deployment"
           fi
-        
+
       - uses: grantbirki/octodns-action@v1
         id: octodns
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
