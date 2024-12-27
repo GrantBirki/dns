@@ -210,3 +210,12 @@ _atproto:
         auto-ttl: true
     values:
       - did=did:plc:rm7todfgrrgavltccx4s767a
+
+# a test record for deployment testing
+test:
+  - type: TXT
+    octodns:
+      cloudflare:
+        auto-ttl: true
+    values:
+      - test=ok
