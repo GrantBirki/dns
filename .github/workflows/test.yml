@@ -15,6 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: install poetry
+        run: pipx install poetry
+
       - uses: actions/setup-python@v5
         with:
           cache: "poetry"
