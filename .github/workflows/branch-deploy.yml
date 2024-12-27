@@ -38,22 +38,22 @@ jobs:
           admins: "GrantBirki"
 
       - name: checkout
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.branch-deploy.outputs.sha }}
 
       - name: install poetry
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: pipx install poetry
 
       - uses: actions/setup-python@v5
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
           cache: "poetry"
 
       - name: install dependencies
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: poetry install
 
       - name: force-check
