@@ -24,3 +24,6 @@ jobs:
 
       - name: install dependencies
         run: poetry install
+
+      - name: check install
+        run: poetry run octodns-sync --version
