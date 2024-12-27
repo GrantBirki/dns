@@ -19,5 +19,8 @@ jobs:
         with:
           cache: "pipenv"
 
+      - name: install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - name: install dependencies
         run: pipenv install
