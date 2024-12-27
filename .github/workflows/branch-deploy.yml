@@ -46,14 +46,11 @@ jobs:
       - uses: actions/setup-python@v5
         if: steps.branch-deploy.outputs.continue == 'true'
         with:
-          cache: "pipenv"
-
-      - name: install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+          cache: "poetry"
 
       - name: install dependencies
         if: steps.branch-deploy.outputs.continue == 'true'
-        run: pipenv install
+        run: poetry install
 
       - name: force-check
         id: force-check

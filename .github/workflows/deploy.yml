@@ -38,13 +38,10 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          cache: "pipenv"
-
-      - name: install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-            
+          cache: "poetry"
+         
       - name: install dependencies
-        run: pipenv install
+        run: poetry install
         
       - uses: grantbirki/octodns-action@v1
         id: octodns
