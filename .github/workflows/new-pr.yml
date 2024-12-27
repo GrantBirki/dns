@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   new-pr:
-    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' }}
     runs-on: ubuntu-latest
 
     steps:

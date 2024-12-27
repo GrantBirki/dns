@@ -38,22 +38,22 @@ jobs:
           admins: "GrantBirki"
 
       - name: checkout
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.branch-deploy.outputs.sha }}
 
       - name: install poetry
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: pipx install poetry
 
       - uses: actions/setup-python@v5
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
           cache: "poetry"
 
       - name: install dependencies
-        if: steps.branch-deploy.outputs.continue == 'true'
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: poetry install
 
       - name: force-check
@@ -104,9 +104,14 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
 
+      - name: view log output
+        run: echo "${{ steps.octodns.outputs.log }}"
+        if: ${{ steps.octodns.outputs.log != '' && steps.branch-deploy.outputs.continue == 'true' }}
+        continue-on-error: true
+
       - name: update deploy comment
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
         run: |
-          python script/ci/update_deploy_msg.py
+          poetry run python script/ci/update_deploy_msg.py
