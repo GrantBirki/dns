@@ -1,11 +1,5 @@
 ---
 "":
-  - type: CNAME
-    octodns:
-      cloudflare:
-        auto-ttl: true
-    ttl: 300
-    value: apex-loadbalancer.netlify.com.
   - type: MX
     values:
       - exchange: aspmx.l.google.com.
@@ -38,4 +32,13 @@ www:
       auto-ttl: true
   ttl: 300
   type: CNAME
+  value: apex-loadbalancer.netlify.com.
+
+# root cname flattening
+@:
+  octodns:
+    cloudflare:
+      auto-ttl: true
+  type: CNAME
+  ttl: 300
   value: apex-loadbalancer.netlify.com.
