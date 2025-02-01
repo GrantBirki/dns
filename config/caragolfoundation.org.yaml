@@ -1,6 +1,6 @@
 ---
 "":
-  - type: CNAME
+  - type: ALIAS
     octodns:
       cloudflare:
         auto-ttl: true
