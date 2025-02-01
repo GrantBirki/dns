@@ -1,15 +1,11 @@
 ---
 "":
-  - type: A
+  - type: CNAME
     octodns:
       cloudflare:
         auto-ttl: true
     ttl: 300
-    values:
-      - 185.199.108.153
-      - 185.199.109.153
-      - 185.199.110.153
-      - 185.199.111.153
+    value: apex-loadbalancer.netlify.com.
   - type: MX
     values:
       - exchange: aspmx.l.google.com.
@@ -42,4 +38,4 @@ www:
       auto-ttl: true
   ttl: 300
   type: CNAME
-  value: caragolfoundation.github.io.
+  value: apex-loadbalancer.netlify.com.
