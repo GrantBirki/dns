@@ -26,6 +26,7 @@
     values:
       - google-site-verification=12tsato1H6YJFtEbEP8gL1UDZjNEoTyc88JkZEjcKII
       - v=spf1 include:_spf.google.com -all
+      - google-site-verification=1d_AcTbsWjApLpKHg6gWR9oqSLx8tixXGVqc00mXx8w
 
 _github-challenge-caragolfoundation-org:
   octodns:
