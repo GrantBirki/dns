@@ -196,6 +196,15 @@ log:
         proxied: false
         auto-ttl: true
 
+# https://github.com/GrantBirki/software
+software:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
 # https://github.com/GrantBirki/tgct
 tgct:
   - type: CNAME
