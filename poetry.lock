@@ -164,14 +164,14 @@ all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2
 
 [[package]]
 name = "jinja2"
-version = "3.1.5"
+version = "3.1.6"
 description = "A very fast and expressive template engine."
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "jinja2-3.1.5-py3-none-any.whl", hash = "sha256:aba0f4dc9ed8013c424088f68a5c226f7d6097ed89b246d7749c2ec4175c6adb"},
-    {file = "jinja2-3.1.5.tar.gz", hash = "sha256:8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb"},
+    {file = "jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"},
+    {file = "jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d"},
 ]
 
 [package.dependencies]
@@ -269,14 +269,14 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "octodns"
-version = "1.10.0"
+version = "1.11.0"
 description = "OctoDNS: DNS as code - Tools for managing DNS across multiple providers"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "octodns-1.10.0-py3-none-any.whl", hash = "sha256:7165cdbc0d71d9158ea0bf6b6620d74e68e84db2e80851767bae684929ae65f1"},
-    {file = "octodns-1.10.0.tar.gz", hash = "sha256:6270781fabf5b4ea7ac5d3286a2082fdd3418599d4667e5b8416b96f8d3e62d6"},
+    {file = "octodns-1.11.0-py3-none-any.whl", hash = "sha256:620e5399f44e2f1cfd072446fc8f3a6e1b37a7c8c8fe01356fab2a21a3308c75"},
+    {file = "octodns-1.11.0.tar.gz", hash = "sha256:fef5ee42fdf6e3097c7a77061f762c6923881be4ee91280ef216e66ea429fc83"},
 ]
 
 [package.dependencies]
@@ -288,7 +288,7 @@ python-dateutil = ">=2.8.1"
 PyYaml = ">=4.2b1"
 
 [package.extras]
-dev = ["black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "docutils (<=0.20.1)", "isort (>=5.11.5)", "pycountry (>=19.8.18)", "pycountry-convert (>=0.7.2)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)", "readme-renderer[md] (>=26.0)", "twine (>=3.4.2)"]
+dev = ["black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "isort (>=5.11.5)", "pycountry (>=19.8.18)", "pycountry-convert (>=0.7.2)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)", "readme_renderer[md] (>=26.0)", "twine (>=3.4.2)"]
 
 [[package]]
 name = "octodns-cloudflare"
@@ -443,4 +443,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "==3.13.1"
-content-hash = "4379f54dbe85feb8da38e6a44ed8bfd83bbbedb129435d5335cf253ad31080da"
+content-hash = "3655c4fff5d8e41d256d5f9067b78bfa3b9e17e833ca1348e18f0fd158a2c30d"
