@@ -1,11 +1,11 @@
 ---
 "":
-  - type: ALIAS
-    octodns:
-      cloudflare:
-        auto-ttl: true
-    ttl: 300
-    value: apex-loadbalancer.netlify.com.
+  # - type: ALIAS
+  #   octodns:
+  #     cloudflare:
+  #       auto-ttl: true
+  #   ttl: 300
+  #   value: apex-loadbalancer.netlify.com.
   - type: MX
     values:
       - exchange: aspmx.l.google.com.
@@ -36,6 +36,7 @@ www:
   octodns:
     cloudflare:
       auto-ttl: true
+      proxied: false
   ttl: 300
   type: CNAME
-  value: apex-loadbalancer.netlify.com.
+  value: ghs.googlehosted.com.
