@@ -269,14 +269,14 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "octodns"
-version = "1.11.0"
+version = "1.12.0"
 description = "OctoDNS: DNS as code - Tools for managing DNS across multiple providers"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "octodns-1.11.0-py3-none-any.whl", hash = "sha256:620e5399f44e2f1cfd072446fc8f3a6e1b37a7c8c8fe01356fab2a21a3308c75"},
-    {file = "octodns-1.11.0.tar.gz", hash = "sha256:fef5ee42fdf6e3097c7a77061f762c6923881be4ee91280ef216e66ea429fc83"},
+    {file = "octodns-1.12.0-py3-none-any.whl", hash = "sha256:882376e54f37eefad3cd3815b8b65cf8188ab6c0515dc2e4196e105cc3d9d140"},
+    {file = "octodns-1.12.0.tar.gz", hash = "sha256:bd57be7f9da05a7ad5ba317896601bc1c2b1b28c6cd37e147d62ca7ae2b2d1c0"},
 ]
 
 [package.dependencies]
@@ -428,7 +428,7 @@ version = "2.5.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "dev"]
+groups = ["main"]
 files = [
     {file = "urllib3-2.5.0-py3-none-any.whl", hash = "sha256:e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc"},
     {file = "urllib3-2.5.0.tar.gz", hash = "sha256:3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760"},
@@ -443,4 +443,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "==3.13.4"
-content-hash = "c79b417402508c6fd7f8edc65993cd45c8f5c1de22dca7de013cbaf4dd9d31c7"
+content-hash = "5b2f2f060e9a26f19130df9a4a528cce24a68b3921cbe500e583d58ee04d2441"
