@@ -269,14 +269,14 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "octodns"
-version = "1.12.0"
+version = "1.13.0"
 description = "OctoDNS: DNS as code - Tools for managing DNS across multiple providers"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "octodns-1.12.0-py3-none-any.whl", hash = "sha256:882376e54f37eefad3cd3815b8b65cf8188ab6c0515dc2e4196e105cc3d9d140"},
-    {file = "octodns-1.12.0.tar.gz", hash = "sha256:bd57be7f9da05a7ad5ba317896601bc1c2b1b28c6cd37e147d62ca7ae2b2d1c0"},
+    {file = "octodns-1.13.0-py3-none-any.whl", hash = "sha256:26b2987910ea6d2e548f90771ba9874c5606053ddb02cd15e2b9cea15b50bf7f"},
+    {file = "octodns-1.13.0.tar.gz", hash = "sha256:b3223b18d094c2e5d57ce1b09d0cf5b6d0b818efa1ef508d69fb6bce8b6f4f3e"},
 ]
 
 [package.dependencies]
@@ -288,7 +288,8 @@ python-dateutil = ">=2.8.1"
 PyYaml = ">=4.2b1"
 
 [package.extras]
-dev = ["black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "isort (>=5.11.5)", "pycountry (>=19.8.18)", "pycountry-convert (>=0.7.2)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)", "readme_renderer[md] (>=26.0)", "twine (>=3.4.2)"]
+dev = ["black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "changelet", "isort (>=5.11.5)", "pycountry (>=19.8.18)", "pycountry-convert (>=0.7.2)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)", "readme_renderer[md] (>=26.0)", "twine (>=3.4.2)"]
+docs = ["Sphinx (>=8.2.3)", "furo (>=2024.8.6)", "myst-parser (>=4.0.1)", "sphinx-copybutton (>=0.5.2)"]
 
 [[package]]
 name = "octodns-cloudflare"
@@ -443,4 +444,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "==3.13.4"
-content-hash = "5b2f2f060e9a26f19130df9a4a528cce24a68b3921cbe500e583d58ee04d2441"
+content-hash = "153b5cf8d46c5870fc5393cf6722584363c30f84a0f62cf3458bdd494537316a"
