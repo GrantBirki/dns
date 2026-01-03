@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: branch-deploy
         id: branch-deploy
-        uses: github/branch-deploy@v10
+        uses: github/branch-deploy@v11
         with:
           trigger: ".deploy"
           environment: production
