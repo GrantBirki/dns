@@ -127,6 +127,15 @@ eco:
         proxied: false
         auto-ttl: true
 
+# https://github.com/GrantBirki/stickers
+stickers:
+  - type: CNAME
+    value: grantbirki.github.io.
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
 # https://github.com/GrantBirki/errbot
 errbot:
   - type: CNAME
