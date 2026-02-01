@@ -269,14 +269,14 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "octodns"
-version = "1.13.0"
+version = "1.15.0"
 description = "OctoDNS: DNS as code - Tools for managing DNS across multiple providers"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "octodns-1.13.0-py3-none-any.whl", hash = "sha256:26b2987910ea6d2e548f90771ba9874c5606053ddb02cd15e2b9cea15b50bf7f"},
-    {file = "octodns-1.13.0.tar.gz", hash = "sha256:b3223b18d094c2e5d57ce1b09d0cf5b6d0b818efa1ef508d69fb6bce8b6f4f3e"},
+    {file = "octodns-1.15.0-py3-none-any.whl", hash = "sha256:f66ffe5cc93e6f96cc8857fb50317511177702ccc18a77041d336d9f119935f3"},
+    {file = "octodns-1.15.0.tar.gz", hash = "sha256:cf8a04bc236f9aca1b72820615db47ad35930e29314ae0a707fc17d8d6cf2659"},
 ]
 
 [package.dependencies]
@@ -288,8 +288,9 @@ python-dateutil = ">=2.8.1"
 PyYaml = ">=4.2b1"
 
 [package.extras]
-dev = ["black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "changelet", "isort (>=5.11.5)", "pycountry (>=19.8.18)", "pycountry-convert (>=0.7.2)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)", "readme_renderer[md] (>=26.0)", "twine (>=3.4.2)"]
-docs = ["Sphinx (>=8.2.3)", "furo (>=2024.8.6)", "myst-parser (>=4.0.1)", "sphinx-copybutton (>=0.5.2)"]
+dev = ["black (>=24.3.0,<25.0.0)", "build (>=0.7.0)", "changelet", "isort (>=5.11.5)", "proviso", "pycountry (>=19.8.18)", "pycountry-convert (>=0.7.2)", "pyflakes (>=2.2.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)", "readme_renderer[md] (>=26.0)", "twine (>=3.4.2)"]
+docs = ["Sphinx (>=8.1.0)", "myst-parser (>=4.0.1)", "sphinx-copybutton (>=0.5.2)", "sphinx_rtd_theme", "sphinxcontrib-mermaid (>=1.0.0)"]
+test = ["pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "pytest-network (>=0.0.1)"]
 
 [[package]]
 name = "octodns-cloudflare"
@@ -429,7 +430,7 @@ version = "2.6.3"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "dev"]
+groups = ["main"]
 files = [
     {file = "urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4"},
     {file = "urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed"},
@@ -444,4 +445,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = "==3.13.4"
-content-hash = "153b5cf8d46c5870fc5393cf6722584363c30f84a0f62cf3458bdd494537316a"
+content-hash = "f7cb104d5d4cdf354c608a6fabba7290134923c8d9e3049ce4984c29eb1950e1"
