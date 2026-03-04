@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: branch-deploy
         id: branch-deploy
-        uses: github/branch-deploy@v11
+        uses: github/branch-deploy@fded0351b6b79f854b335c11b3d93063461dd288 # pin@v11
         with:
           trigger: ".deploy"
           environment: production
@@ -40,7 +40,7 @@ jobs:
 
       - name: checkout
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
         with:
           ref: ${{ steps.branch-deploy.outputs.sha }}
 
@@ -48,7 +48,7 @@ jobs:
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: pipx install poetry
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # pin@v6
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
           cache: "poetry"
@@ -93,7 +93,7 @@ jobs:
             echo "this is a deployment"
           fi
 
-      - uses: grantbirki/octodns-action@v1
+      - uses: grantbirki/octodns-action@21a241054238dfe984852b910ba7633bc1308b7d # pin@v1
         id: octodns
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
