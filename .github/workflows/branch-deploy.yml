@@ -15,6 +15,7 @@ permissions:
 jobs:
   branch-deploy:
     name: branch-deploy
+    environment: production-secrets
     if: # only run on pull request comments and very specific comment body string as defined in our branch-deploy settings
       ${{ github.event.issue.pull_request &&
       (startsWith(github.event.comment.body, '.deploy') ||
