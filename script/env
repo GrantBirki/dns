@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export OFF='\033[0m'
+export BLUE='\033[0;34m'
+export PURPLE='\033[0;35m'
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
+export DIR
+
+PYTHON_VERSION_FILE="$DIR/.python-version"
+if [ ! -f "$PYTHON_VERSION_FILE" ]; then
+  echo ".python-version is missing" >&2
+  return 1 2>/dev/null || exit 1
+fi
+
+PROJECT_PYTHON_VERSION="$(tr -d '[:space:]' < "$PYTHON_VERSION_FILE")"
+export PROJECT_PYTHON_VERSION
+
+if command -v pyenv >/dev/null 2>&1; then
+  PYENV_ROOT="${PYENV_ROOT:-$(pyenv root)}"
+  export PYENV_ROOT
+  export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+  : "${PYENV_VERSION:=$PROJECT_PYTHON_VERSION}"
+  export PYENV_VERSION
+fi
+
+if command -v pyenv >/dev/null 2>&1; then
+  BOOTSTRAP_PYTHON_BIN="${BOOTSTRAP_PYTHON_BIN:-$(pyenv which python 2>/dev/null || true)}"
+else
+  BOOTSTRAP_PYTHON_BIN="${BOOTSTRAP_PYTHON_BIN:-$(command -v python || true)}"
+fi
+
+if [ -z "$BOOTSTRAP_PYTHON_BIN" ]; then
+  BOOTSTRAP_PYTHON_BIN="$(command -v python3 || true)"
+fi
+export BOOTSTRAP_PYTHON_BIN
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  PLATFORM="macos"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  PLATFORM="linux"
+else
+  PLATFORM="unknown"
+fi
+
+ARCH="$(uname -m || echo "unknown")"
+export PLATFORM
+export ARCH
+
+SUPPORTED_VENDOR_PYTHON_PLATFORM="false"
+case "${PLATFORM}:${ARCH}" in
+  macos:arm64)
+    VENDOR_PYTHON_PLATFORM_DIR="$DIR/vendor/cache/python/macos-arm64"
+    SUPPORTED_VENDOR_PYTHON_PLATFORM="true"
+    ;;
+  linux:x86_64)
+    VENDOR_PYTHON_PLATFORM_DIR="$DIR/vendor/cache/python/linux-x86_64"
+    SUPPORTED_VENDOR_PYTHON_PLATFORM="true"
+    ;;
+  *)
+    VENDOR_PYTHON_PLATFORM_DIR="$DIR/vendor/cache/python/unsupported"
+    ;;
+esac
+
+export SUPPORTED_VENDOR_PYTHON_PLATFORM
+export VENV_DIR="$DIR/.venv"
+export ARTIFACTS_DIR="$DIR/artifacts"
+export TMP_DIR="$DIR/tmp"
+export UV_CACHE_DIR="$TMP_DIR/uv-cache"
+export BOOTSTRAP_TOOLS_DIR="$DIR/.bootstrap-tools"
+export UV_BOOTSTRAP_VERSION="0.11.2"
+export UV_PROJECT_ENVIRONMENT="$VENV_DIR"
+export UV_LINK_MODE="copy"
+export UV_PYTHON_DOWNLOADS="never"
+export VENDOR_DIR="$DIR/vendor"
+export VENDOR_CACHE_DIR="$VENDOR_DIR/cache"
+export VENDOR_PYTHON_CACHE_DIR="$VENDOR_PYTHON_PLATFORM_DIR"
+export VENDOR_BOOTSTRAP_REQUIREMENTS="$VENDOR_DIR/bootstrap-tools.lock.txt"
+export VENDOR_PYTHON_REQUIREMENTS="$VENDOR_DIR/requirements.lock.txt"
+export PATH="$VENV_DIR/bin:$PATH"
+
+mkdir -p \
+  "$ARTIFACTS_DIR" \
+  "$TMP_DIR" \
+  "$UV_CACHE_DIR" \
+  "$BOOTSTRAP_TOOLS_DIR" \
+  "$VENDOR_CACHE_DIR"

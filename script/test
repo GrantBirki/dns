@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source script/env "$@"
+cd "$DIR"
+
+if [ ! -x "$VENV_DIR/bin/octodns-sync" ]; then
+  script/bootstrap "$@"
+fi
+
+"$VENV_DIR/bin/octodns-sync" --version

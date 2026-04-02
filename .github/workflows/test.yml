@@ -14,16 +14,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
-
-      - name: install poetry
-        run: pipx install poetry
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # pin@v6
         with:
-          cache: "poetry"
+          python-version-file: .python-version
 
-      - name: install dependencies
-        run: poetry install
+      - name: bootstrap
+        run: script/bootstrap
 
-      - name: check install
-        run: poetry run octodns-sync --version
+      - name: test
+        run: script/test

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source script/env "$@"
+cd "$DIR"
+
+script/bootstrap "$@"
+"$VENV_DIR/bin/octodns-sync" --config-file production.yaml "$@"
