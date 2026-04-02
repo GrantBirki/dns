@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source script/env "$@"
+cd "$DIR"
+
+require_file() {
+  local path="$1"
+  if [ ! -f "$path" ]; then
+    echo "required file missing: $path" >&2
+    echo "run script/vendor to refresh vendored dependencies" >&2
+    exit 1
+  fi
+}
+
+PYTHON_BIN="${BOOTSTRAP_PYTHON_BIN:-}"
+if [ -z "$PYTHON_BIN" ]; then
+  echo "python is required but was not found on PATH" >&2
+  exit 1
+fi
+
+run_uv() {
+  PYTHONPATH="$BOOTSTRAP_TOOLS_DIR${PYTHONPATH:+:$PYTHONPATH}" "$PYTHON_BIN" -m uv "$@"
+}
+
+current_python_version="$("$PYTHON_BIN" -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')"
+if [ "$current_python_version" != "$PROJECT_PYTHON_VERSION" ]; then
+  echo "python $PROJECT_PYTHON_VERSION is required, found $current_python_version" >&2
+  echo "install the pinned version with pyenv and try again" >&2
+  exit 1
+fi
+
+if [ "$SUPPORTED_VENDOR_PYTHON_PLATFORM" != "true" ]; then
+  echo "unsupported platform for vendored Python dependencies: ${PLATFORM}:${ARCH}" >&2
+  exit 1
+fi
+
+require_file "$DIR/uv.lock"
+require_file "$VENDOR_PYTHON_REQUIREMENTS"
+require_file "$VENDOR_BOOTSTRAP_REQUIREMENTS"
+
+if ! PYTHONPATH="$BOOTSTRAP_TOOLS_DIR${PYTHONPATH:+:$PYTHONPATH}" "$PYTHON_BIN" -m uv --version 2>/dev/null | grep -Eq "^uv ${UV_BOOTSTRAP_VERSION}( |$)"; then
+  rm -rf "$BOOTSTRAP_TOOLS_DIR"
+  mkdir -p "$BOOTSTRAP_TOOLS_DIR"
+  "$PYTHON_BIN" -m pip install \
+    --disable-pip-version-check \
+    --require-hashes \
+    --no-index \
+    --find-links "$VENDOR_PYTHON_CACHE_DIR" \
+    --target "$BOOTSTRAP_TOOLS_DIR" \
+    -r "$VENDOR_BOOTSTRAP_REQUIREMENTS"
+fi
+
+if [ ! -d "$VENV_DIR" ]; then
+  echo -e "${BLUE}Creating virtual environment with Python ${PURPLE}${PROJECT_PYTHON_VERSION}${OFF}"
+  run_uv venv --python "$PYTHON_BIN" "$VENV_DIR"
+fi
+
+echo -e "${BLUE}Syncing Python dependencies from ${PURPLE}$VENDOR_PYTHON_CACHE_DIR${OFF}"
+run_uv pip sync \
+  --python "$VENV_DIR/bin/python" \
+  --require-hashes \
+  --no-index \
+  --find-links "$VENDOR_PYTHON_CACHE_DIR" \
+  "$VENDOR_PYTHON_REQUIREMENTS"

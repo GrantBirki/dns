@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source script/env "$@"
+cd "$DIR"
+
+PYTHON_BIN="${BOOTSTRAP_PYTHON_BIN:-}"
+if [ -z "$PYTHON_BIN" ]; then
+  echo "python is required but was not found on PATH" >&2
+  exit 1
+fi
+
+current_python_version="$("$PYTHON_BIN" -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')"
+if [ "$current_python_version" != "$PROJECT_PYTHON_VERSION" ]; then
+  echo "python $PROJECT_PYTHON_VERSION is required, found $current_python_version" >&2
+  echo "install the pinned version with pyenv and try again" >&2
+  exit 1
+fi
+
+python_series="$(printf '%s' "$PROJECT_PYTHON_VERSION" | awk -F. '{print $1 "." $2}')"
+python_abi="cp$(printf '%s' "$PROJECT_PYTHON_VERSION" | awk -F. '{print $1 $2}')"
+
+run_uv() {
+  if [ -n "${UV_EXTERNAL_BIN:-}" ]; then
+    "$UV_EXTERNAL_BIN" "$@"
+    return
+  fi
+  PYTHONPATH="$BOOTSTRAP_TOOLS_DIR${PYTHONPATH:+:$PYTHONPATH}" "$PYTHON_BIN" -m uv "$@"
+}
+
+ensure_uv() {
+  if PYTHONPATH="$BOOTSTRAP_TOOLS_DIR${PYTHONPATH:+:$PYTHONPATH}" "$PYTHON_BIN" -m uv --version 2>/dev/null | grep -Eq "^uv ${UV_BOOTSTRAP_VERSION}( |$)"; then
+    return
+  fi
+
+  if command -v uv >/dev/null 2>&1 && uv --version 2>/dev/null | grep -Eq "^uv ${UV_BOOTSTRAP_VERSION}( |$)"; then
+    UV_EXTERNAL_BIN="$(command -v uv)"
+    export UV_EXTERNAL_BIN
+    return
+  fi
+
+  rm -rf "$BOOTSTRAP_TOOLS_DIR"
+  mkdir -p "$BOOTSTRAP_TOOLS_DIR"
+  "$PYTHON_BIN" -m pip install \
+    --disable-pip-version-check \
+    --target "$BOOTSTRAP_TOOLS_DIR" \
+    "uv==${UV_BOOTSTRAP_VERSION}"
+}
+
+ensure_uv
+
+echo -e "${BLUE}Locking Python dependencies with uv${OFF}"
+run_uv lock
+run_uv sync --frozen
+run_uv export --frozen --format requirements.txt --output-file "$VENDOR_PYTHON_REQUIREMENTS" >/dev/null
+
+rm -rf "$VENDOR_CACHE_DIR/python"
+mkdir -p "$VENDOR_CACHE_DIR/python/macos-arm64" "$VENDOR_CACHE_DIR/python/linux-x86_64"
+
+echo -e "${BLUE}Vendoring Python wheels for ${PURPLE}macOS arm64${OFF}"
+"$PYTHON_BIN" -m pip download \
+  --require-hashes \
+  --dest "$VENDOR_CACHE_DIR/python/macos-arm64" \
+  --only-binary=:all: \
+  --platform macosx_11_0_arm64 \
+  --python-version "$python_series" \
+  --implementation cp \
+  --abi "$python_abi" \
+  -r "$VENDOR_PYTHON_REQUIREMENTS"
+
+"$PYTHON_BIN" -m pip download \
+  --require-hashes \
+  --dest "$VENDOR_CACHE_DIR/python/macos-arm64" \
+  --only-binary=:all: \
+  --platform macosx_11_0_arm64 \
+  --python-version "$python_series" \
+  --implementation cp \
+  --abi "$python_abi" \
+  -r "$VENDOR_BOOTSTRAP_REQUIREMENTS"
+
+echo -e "${BLUE}Vendoring Python wheels for ${PURPLE}Linux x86_64${OFF}"
+"$PYTHON_BIN" -m pip download \
+  --require-hashes \
+  --dest "$VENDOR_CACHE_DIR/python/linux-x86_64" \
+  --only-binary=:all: \
+  --platform manylinux2014_x86_64 \
+  --python-version "$python_series" \
+  --implementation cp \
+  --abi "$python_abi" \
+  -r "$VENDOR_PYTHON_REQUIREMENTS"
+
+"$PYTHON_BIN" -m pip download \
+  --require-hashes \
+  --dest "$VENDOR_CACHE_DIR/python/linux-x86_64" \
+  --only-binary=:all: \
+  --platform manylinux2014_x86_64 \
+  --python-version "$python_series" \
+  --implementation cp \
+  --abi "$python_abi" \
+  -r "$VENDOR_BOOTSTRAP_REQUIREMENTS"

@@ -1,17 +1,35 @@
-[tool.poetry]
+[project]
 name = "dns"
 version = "0.0.0"
 description = "DNS management through octodns"
-authors = ["GrantBirki <grant.birkinbine@gmail.com>"]
 readme = "README.md"
-package-mode = false
+requires-python = "==3.13.4"
+dependencies = [
+  "octodns==1.16.0",
+  "octodns-cloudflare==1.0.0",
+  "jinja2==3.1.6",
+]
 
-[tool.poetry.dependencies]
-python = "==3.13.4"
-octodns = "^1.16.0"
-octodns-cloudflare = "^1.0.0"
-jinja2 = "^3.1.6"
+[tool.uv]
+package = false
+constraint-dependencies = [
+  "certifi==2025.4.26",
+  "charset-normalizer==3.4.2",
+  "dnspython==2.7.0",
+  "fqdn==1.5.1",
+  "idna==3.10",
+  "jinja2==3.1.6",
+  "markupsafe==3.0.2",
+  "natsort==8.4.0",
+  "octodns==1.16.0",
+  "octodns-cloudflare==1.0.0",
+  "python-dateutil==2.9.0.post0",
+  "pyyaml==6.0.2",
+  "requests==2.33.0",
+  "six==1.17.0",
+  "urllib3==2.6.3",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

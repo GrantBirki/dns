@@ -36,22 +36,22 @@ jobs:
         with:
           ref: ${{ needs.deployment-check.outputs.sha }}
 
-      - name: install poetry
-        run: pipx install poetry
-
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # pin@v6
         with:
-          cache: "poetry"
-         
-      - name: install dependencies
-        run: poetry install
-        
+          python-version-file: .python-version
+
+      - name: bootstrap environment
+        run: script/bootstrap
+
+      - name: add repo venv to PATH
+        run: echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+
       - uses: grantbirki/octodns-action@21a241054238dfe984852b910ba7633bc1308b7d # pin@v1
         id: octodns
         with:
           config_path: production.yaml
           doit: '--doit'
-          poetry: true
+          poetry: false
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}

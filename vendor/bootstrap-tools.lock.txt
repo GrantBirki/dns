@@ -1,0 +1,5 @@
+# This file pins the Python bootstrap tools that must be installable from the
+# committed wheel cache before the repo-local virtualenv exists.
+uv==0.11.2 \
+    --hash=sha256:89972042233c90adf8b8150ec164444a4df41938739e5736773ac00870840887 \
+    --hash=sha256:be4bb136bbc8840ede58663e8ba5a9bbf3b5376f7f933f915df28d4078bb9095

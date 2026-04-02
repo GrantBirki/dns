@@ -46,18 +46,18 @@ jobs:
         with:
           ref: ${{ steps.branch-deploy.outputs.sha }}
 
-      - name: install poetry
-        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
-        run: pipx install poetry
-
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # pin@v6
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
-          cache: "poetry"
+          python-version-file: .python-version
 
-      - name: install dependencies
+      - name: bootstrap environment
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
-        run: poetry install
+        run: script/bootstrap
+
+      - name: add repo venv to PATH
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        run: echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
 
       - name: force-check
         id: force-check
@@ -102,7 +102,7 @@ jobs:
           config_path: production.yaml
           doit: ${{ steps.noop-check.outputs.doit }}
           force: ${{ steps.force-check.outputs.force }}
-          poetry: true
+          poetry: false
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
@@ -119,4 +119,4 @@ jobs:
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
         run: |
-          poetry run python script/ci/update_deploy_msg.py
+          .venv/bin/python script/ci/update_deploy_msg.py

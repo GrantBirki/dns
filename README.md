@@ -13,6 +13,38 @@ DNS management through [octodns](https://github.com/octodns/octodns)
 
 This repository is used to manage DNS records for various domains. `octodns` is used to manage all DNS records through Infrastructure as Code (IaC) principles. The [github/branch-deploy](https://github.com/github/branch-deploy) is responsible for deploying changes to production.
 
+## Development Workflow 🧰
+
+This repository uses the "scripts to rule them all" pattern. Use the repo-owned `script/*` entrypoints instead of invoking `uv` or `octodns` commands directly.
+
+Python is pinned in [`.python-version`](.python-version), and this repo expects a shim-based version manager such as `pyenv` to provide that exact interpreter:
+
+```bash
+pyenv install $(cat .python-version)
+```
+
+Once the pinned Python is installed, the standard workflows are:
+
+```bash
+script/bootstrap
+script/test
+script/plan
+script/deploy
+```
+
+- `script/bootstrap` installs the pinned bootstrap tooling and project dependencies from the committed wheel cache.
+- `script/test` verifies that `octodns` is installed correctly.
+- `script/plan` runs a non-destructive `octodns-sync` plan against `production.yaml`.
+- `script/deploy` runs `octodns-sync --doit` against `production.yaml`.
+
+Dependency updates are intentionally explicit. Refresh the lockfiles and vendored wheels with:
+
+```bash
+script/vendor
+```
+
+The `vendor/cache` directory is committed to the repository so the project can bootstrap and run without contacting package indexes during normal development or CI.
+
 ## Deployment Process 🚀
 
 This repository uses IssueOps via the [github/branch-deploy](https://github.com/github/branch-deploy) action to deploy changes to production. This ensure that all changes safely follow the [branch deploy model](https://blog.birki.io/posts/branch-deploy/).
