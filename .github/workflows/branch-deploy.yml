@@ -52,11 +52,11 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - name: bootstrap environment
+      - name: bootstrap
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: script/bootstrap
 
-      - name: add repo venv to PATH
+      - name: setup venv
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         run: echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
 

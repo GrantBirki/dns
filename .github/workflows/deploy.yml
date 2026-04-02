@@ -41,10 +41,10 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - name: bootstrap environment
+      - name: bootstrap
         run: script/bootstrap
 
-      - name: add repo venv to PATH
+      - name: setup venv
         run: echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
 
       - uses: grantbirki/octodns-action@21a241054238dfe984852b910ba7633bc1308b7d # pin@v1

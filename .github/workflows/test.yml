@@ -21,8 +21,8 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - name: bootstrap environment
+      - name: bootstrap
         run: script/bootstrap
 
-      - name: run tests
+      - name: test
         run: script/test
