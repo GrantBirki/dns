@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = "==3.13.4"
 dependencies = [
   "octodns==1.16.0",
-  "octodns-cloudflare==1.0.0",
+  "octodns-cloudflare==1.1.0",
   "jinja2==3.1.6",
 ]
 
@@ -22,7 +22,7 @@ constraint-dependencies = [
   "markupsafe==3.0.2",
   "natsort==8.4.0",
   "octodns==1.16.0",
-  "octodns-cloudflare==1.0.0",
+  "octodns-cloudflare==1.1.0",
   "python-dateutil==2.9.0.post0",
   "pyyaml==6.0.2",
   "requests==2.33.0",
