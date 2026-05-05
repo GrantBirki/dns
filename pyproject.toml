@@ -13,7 +13,7 @@ dependencies = [
 [tool.uv]
 package = false
 constraint-dependencies = [
-  "certifi==2026.1.4",
+  "certifi==2026.2.25",
   "charset-normalizer==3.4.7",
   "dnspython==2.8.0",
   "fqdn==1.5.1",
