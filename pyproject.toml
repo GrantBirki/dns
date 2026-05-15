@@ -27,7 +27,7 @@ constraint-dependencies = [
   "pyyaml==6.0.3",
   "requests==2.33.1",
   "six==1.17.0",
-  "urllib3==2.6.3",
+  "urllib3==2.7.0",
 ]
 
 [build-system]
