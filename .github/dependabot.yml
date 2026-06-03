@@ -15,7 +15,7 @@ updates:
   - package-ecosystem: uv
     directory: "/"
     cooldown:
-      default-days: 45
+      default-days: 21
     schedule:
       interval: monthly
     groups:
