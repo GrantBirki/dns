@@ -60,7 +60,7 @@ Here is a trimmed down summary of the deployment process:
 
 5. 🎉 Merge!
 
-> Note: you can use `.deploy | FORCE=true` to force deploy changes
+> Note: you can use `.deploy | FORCE=true` to force deploy changes.
 
 ## License
 
