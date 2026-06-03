@@ -2,7 +2,21 @@
 
 set -euo pipefail
 
-source script/env "$@"
+upgrade_args=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --upgrade | -U)
+      upgrade_args=(--upgrade)
+      ;;
+    *)
+      echo "usage: script/vendor [--upgrade|-U]" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+source script/env
 cd "$DIR"
 
 PYTHON_BIN="${BOOTSTRAP_PYTHON_BIN:-}"
@@ -51,7 +65,7 @@ ensure_uv() {
 ensure_uv
 
 echo -e "${BLUE}Locking Python dependencies with uv${OFF}"
-run_uv lock
+run_uv lock "${upgrade_args[@]}"
 run_uv sync --frozen
 run_uv export --frozen --format requirements.txt --output-file "$VENDOR_PYTHON_REQUIREMENTS" >/dev/null
 
