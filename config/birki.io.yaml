@@ -52,6 +52,16 @@ ingress:
         proxied: false
         auto-ttl: true
 
+# Stable DNS name for the private Radar endpoint. This intentionally points
+# directly at a Tailscale IP and must not be Cloudflare-proxied.
+radar:
+  - type: A
+    value: 100.75.116.66
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
 # https://github.com/GrantBirki/journal
 journal:
   - type: CNAME
