@@ -52,8 +52,18 @@ ingress:
         proxied: false
         auto-ttl: true
 
-# Stable DNS name for the private Radar endpoint. This intentionally points
+# Stable DNS names for the private Radar endpoint. These intentionally point
 # directly at a Tailscale IP and must not be Cloudflare-proxied.
+# radar-core is the operational OpenObserve/API/ingest endpoint.
+radar-core:
+  - type: A
+    value: 100.75.116.66
+    octodns:
+      cloudflare:
+        proxied: false
+        auto-ttl: true
+
+# radar is the authenticated read-only dashboard endpoint.
 radar:
   - type: A
     value: 100.75.116.66
