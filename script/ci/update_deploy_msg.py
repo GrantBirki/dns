@@ -1,32 +1,33 @@
-import jinja2
 import os
+from pathlib import Path
 
-TEMPLATE_FILE = '.github/deployment_message.md'
+TEMPLATE_FILE = Path('.github/deployment_message.md')
+RAW_START = '{% raw %}'
+RAW_END = '{% endraw %}'
+RESULTS_PLACEHOLDER = '[[ results ]]'
 
-results = os.environ.get('MSG', False)
 
-# Set up the Jinja2 environment and change variable syntax to [[ ]]
-environment = jinja2.Environment(
-    loader=jinja2.FileSystemLoader('.'),
-    variable_start_string='[[',
-    variable_end_string=']]',
-)
+def render_deploy_message(template_text, results):
+    return (
+        template_text
+        .replace(RAW_START, '')
+        .replace(RAW_END, '')
+        .replace(RESULTS_PLACEHOLDER, str(results))
+    )
 
-# Load the template from a file
-template = environment.get_template(TEMPLATE_FILE)
 
-# Define the variables to be inserted
-variables = {
-    "results": results
-}
+def main():
+    results = os.environ.get('MSG', False)
+    rendered_template = render_deploy_message(
+        TEMPLATE_FILE.read_text(encoding='utf-8'),
+        results,
+    )
 
-# Render the template with the provided variables
-rendered_template = template.render(variables)
+    print(rendered_template)
 
-# Print the rendered template
-print(rendered_template)
+    if os.environ.get('GITHUB_ACTIONS', False):
+        TEMPLATE_FILE.write_text(rendered_template, encoding='utf-8')
 
-# if the env is github actions, write the rendered template to a file
-if os.environ.get('GITHUB_ACTIONS', False):
-    with open(TEMPLATE_FILE, 'w') as f:
-        f.write(rendered_template)
+
+if __name__ == '__main__':
+    main()

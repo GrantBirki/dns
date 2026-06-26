@@ -10,3 +10,4 @@ if [ ! -x "$VENV_DIR/bin/octodns-sync" ]; then
 fi
 
 "$VENV_DIR/bin/octodns-sync" --version
+"$VENV_DIR/bin/python" script/ci/test_update_deploy_msg.py
