@@ -10,9 +10,13 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
+      - uses: GrantBirki/fence@73584a435c4fbc54e7e60beeaddb078b350d6d68 # pin@v0.7.1
+        with:
+          mode: audit
+
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
         with:
           persist-credentials: false
