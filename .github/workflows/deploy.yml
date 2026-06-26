@@ -33,35 +33,123 @@ jobs:
     needs: deployment-check
     environment: production
     runs-on: ubuntu-latest
+    concurrency:
+      group: dns-production
+      cancel-in-progress: false
+      queue: max
 
     steps:
       - uses: GrantBirki/fence@73584a435c4fbc54e7e60beeaddb078b350d6d68 # pin@v0.7.1
         with:
           mode: audit
 
-      - name: checkout
+      - name: derive trusted checkout path
+        id: trusted-path
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          echo "DEFAULT_BRANCH=${DEFAULT_BRANCH}"
+
+          trusted_dir="$(printf '%s' "${DEFAULT_BRANCH}" | sed -E 's/[^A-Za-z0-9._-]+/-/g; s/^-+//; s/-+$//')"
+
+          if [[ -z "${trusted_dir}" || "${trusted_dir}" == "." || "${trusted_dir}" == ".." ]]; then
+            echo "invalid trusted checkout directory derived from default branch: ${DEFAULT_BRANCH}" >&2
+            exit 1
+          fi
+
+          if [[ ! "${trusted_dir}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+            echo "trusted checkout directory contains unsafe characters: ${trusted_dir}" >&2
+            exit 1
+          fi
+
+          echo "trusted_dir=${trusted_dir}" >> "$GITHUB_OUTPUT"
+          echo "trusted checkout directory: ${trusted_dir}"
+
+      - name: derive working checkout path
+        id: working-path
+        env:
+          DEPLOY_SHA: ${{ needs.deployment-check.outputs.sha }}
+          TRUSTED_DIR: ${{ steps.trusted-path.outputs.trusted_dir }}
+        run: |
+          set -euo pipefail
+          echo "DEPLOY_SHA=${DEPLOY_SHA} - TRUSTED_DIR=${TRUSTED_DIR}"
+
+          if [[ ! "${DEPLOY_SHA}" =~ ^[0-9a-fA-F]{40}([0-9a-fA-F]{24})?$ ]]; then
+            echo "invalid branch-deploy sha output: ${DEPLOY_SHA}" >&2
+            exit 1
+          fi
+
+          working_dir="deployment-${DEPLOY_SHA}"
+
+          if [[ "${working_dir}" == "${TRUSTED_DIR}" ]]; then
+            echo "working checkout directory collides with trusted checkout directory: ${working_dir}" >&2
+            exit 1
+          fi
+
+          echo "working_dir=${working_dir}" >> "$GITHUB_OUTPUT"
+          echo "working checkout directory: ${working_dir}"
+
+      - name: checkout trusted
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
         with:
+          ref: ${{ github.sha }}
+          path: ${{ steps.trusted-path.outputs.trusted_dir }}
+          fetch-depth: 1
           persist-credentials: false
+
+      - name: checkout working deployment sha
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
+        with:
           ref: ${{ needs.deployment-check.outputs.sha }}
+          path: ${{ steps.working-path.outputs.working_dir }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: verify checkout provenance
+        env:
+          TRUSTED_DIR: ${{ steps.trusted-path.outputs.trusted_dir }}
+          TRUSTED_SHA: ${{ github.sha }}
+          WORKING_DIR: ${{ steps.working-path.outputs.working_dir }}
+          WORKING_SHA: ${{ needs.deployment-check.outputs.sha }}
+        run: |
+          set -euo pipefail
+
+          trusted_head="$(git -C "${TRUSTED_DIR}" rev-parse HEAD)"
+          working_head="$(git -C "${WORKING_DIR}" rev-parse HEAD)"
+
+          if [[ "${trusted_head}" != "${TRUSTED_SHA}" ]]; then
+            echo "trusted checkout HEAD mismatch: expected ${TRUSTED_SHA}, got ${trusted_head}" >&2
+            exit 1
+          fi
+
+          if [[ "${working_head}" != "${WORKING_SHA}" ]]; then
+            echo "working checkout HEAD mismatch: expected ${WORKING_SHA}, got ${working_head}" >&2
+            exit 1
+          fi
+
+          echo "trusted checkout: ${TRUSTED_DIR}@${trusted_head}"
+          echo "working checkout: ${WORKING_DIR}@${working_head}"
 
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # pin@v6
         with:
-          python-version-file: .python-version
+          python-version-file: ${{ steps.trusted-path.outputs.trusted_dir }}/.python-version
 
       - name: bootstrap
+        working-directory: ${{ steps.trusted-path.outputs.trusted_dir }}
         run: script/bootstrap
 
       - name: setup venv
-        run: echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+        run: echo "${{ github.workspace }}/${{ steps.trusted-path.outputs.trusted_dir }}/.venv/bin" >> "$GITHUB_PATH"
 
       - uses: grantbirki/octodns-action@21a241054238dfe984852b910ba7633bc1308b7d # pin@v1
         id: octodns
         with:
-          config_path: production.yaml
+          config_path: ${{ steps.working-path.outputs.working_dir }}/production.yaml
           doit: '--doit'
           poetry: false
         env:
+          OCTODNS_CONFIG_DIR: ${{ github.workspace }}/${{ steps.working-path.outputs.working_dir }}/config
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
 

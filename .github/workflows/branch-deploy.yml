@@ -27,11 +27,38 @@ jobs:
       startsWith(github.event.comment.body, '.wcid') ||
       startsWith(github.event.comment.body, '.unlock')) }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ (startsWith(github.event.comment.body, '.deploy') || startsWith(github.event.comment.body, '.noop')) && 'dns-production' || format('branch-deploy-support-{0}', github.run_id) }}
+      cancel-in-progress: false
+      queue: max
 
     steps:
       - uses: GrantBirki/fence@73584a435c4fbc54e7e60beeaddb078b350d6d68 # pin@v0.7.1
         with:
           mode: audit
+
+      - name: derive trusted checkout path
+        id: trusted-path
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          echo "DEFAULT_BRANCH=${DEFAULT_BRANCH}"
+
+          trusted_dir="$(printf '%s' "${DEFAULT_BRANCH}" | sed -E 's/[^A-Za-z0-9._-]+/-/g; s/^-+//; s/-+$//')"
+
+          if [[ -z "${trusted_dir}" || "${trusted_dir}" == "." || "${trusted_dir}" == ".." ]]; then
+            echo "invalid trusted checkout directory derived from default branch: ${DEFAULT_BRANCH}" >&2
+            exit 1
+          fi
+
+          if [[ ! "${trusted_dir}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+            echo "trusted checkout directory contains unsafe characters: ${trusted_dir}" >&2
+            exit 1
+          fi
+
+          echo "trusted_dir=${trusted_dir}" >> "$GITHUB_OUTPUT"
+          echo "trusted checkout directory: ${trusted_dir}"
 
       - name: branch-deploy
         id: branch-deploy
@@ -43,26 +70,91 @@ jobs:
           production_environments: production
           sticky_locks: "true"
           admins: "GrantBirki"
+          deploy_message_path: ${{ steps.trusted-path.outputs.trusted_dir }}/.github/deployment_message.md
+          allow_forks: "false"
 
-      - name: checkout
+      - name: derive working checkout path
+        id: working-path
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        env:
+          DEPLOY_SHA: ${{ steps.branch-deploy.outputs.sha }}
+          TRUSTED_DIR: ${{ steps.trusted-path.outputs.trusted_dir }}
+        run: |
+          set -euo pipefail
+          echo "DEPLOY_SHA=${DEPLOY_SHA} - TRUSTED_DIR=${TRUSTED_DIR}"
+
+          if [[ ! "${DEPLOY_SHA}" =~ ^[0-9a-fA-F]{40}([0-9a-fA-F]{24})?$ ]]; then
+            echo "invalid branch-deploy sha output: ${DEPLOY_SHA}" >&2
+            exit 1
+          fi
+
+          working_dir="deployment-${DEPLOY_SHA}"
+
+          if [[ "${working_dir}" == "${TRUSTED_DIR}" ]]; then
+            echo "working checkout directory collides with trusted checkout directory: ${working_dir}" >&2
+            exit 1
+          fi
+
+          echo "working_dir=${working_dir}" >> "$GITHUB_OUTPUT"
+          echo "working checkout directory: ${working_dir}"
+
+      - name: checkout trusted
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
         with:
+          ref: ${{ github.sha }}
+          path: ${{ steps.trusted-path.outputs.trusted_dir }}
+          fetch-depth: 1
           persist-credentials: false
+
+      - name: checkout working deployment sha
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
+        with:
           ref: ${{ steps.branch-deploy.outputs.sha }}
+          path: ${{ steps.working-path.outputs.working_dir }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: verify checkout provenance
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        env:
+          TRUSTED_DIR: ${{ steps.trusted-path.outputs.trusted_dir }}
+          TRUSTED_SHA: ${{ github.sha }}
+          WORKING_DIR: ${{ steps.working-path.outputs.working_dir }}
+          WORKING_SHA: ${{ steps.branch-deploy.outputs.sha }}
+        run: |
+          set -euo pipefail
+
+          trusted_head="$(git -C "${TRUSTED_DIR}" rev-parse HEAD)"
+          working_head="$(git -C "${WORKING_DIR}" rev-parse HEAD)"
+
+          if [[ "${trusted_head}" != "${TRUSTED_SHA}" ]]; then
+            echo "trusted checkout HEAD mismatch: expected ${TRUSTED_SHA}, got ${trusted_head}" >&2
+            exit 1
+          fi
+
+          if [[ "${working_head}" != "${WORKING_SHA}" ]]; then
+            echo "working checkout HEAD mismatch: expected ${WORKING_SHA}, got ${working_head}" >&2
+            exit 1
+          fi
+
+          echo "trusted checkout: ${TRUSTED_DIR}@${trusted_head}"
+          echo "working checkout: ${WORKING_DIR}@${working_head}"
 
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # pin@v6
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
-          python-version-file: .python-version
+          python-version-file: ${{ steps.trusted-path.outputs.trusted_dir }}/.python-version
 
       - name: bootstrap
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        working-directory: ${{ steps.trusted-path.outputs.trusted_dir }}
         run: script/bootstrap
 
       - name: setup venv
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
-        run: echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+        run: echo "${{ github.workspace }}/${{ steps.trusted-path.outputs.trusted_dir }}/.venv/bin" >> "$GITHUB_PATH"
 
       - name: force-check
         id: force-check
@@ -104,11 +196,12 @@ jobs:
         id: octodns
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
-          config_path: production.yaml
+          config_path: ${{ steps.working-path.outputs.working_dir }}/production.yaml
           doit: ${{ steps.noop-check.outputs.doit }}
           force: ${{ steps.force-check.outputs.force }}
           poetry: false
         env:
+          OCTODNS_CONFIG_DIR: ${{ github.workspace }}/${{ steps.working-path.outputs.working_dir }}/config
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
 
@@ -121,6 +214,7 @@ jobs:
 
       - name: update deploy comment
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        working-directory: ${{ steps.trusted-path.outputs.trusted_dir }}
         env:
           MSG: ${{ steps.octodns.outputs.plan }}
         run: |
