@@ -7,12 +7,25 @@ RAW_END = '{% endraw %}'
 RESULTS_PLACEHOLDER = '[[ results ]]'
 
 
+def escape_nunjucks_opening_delimiters(results):
+    escaped = []
+    results = str(results)
+
+    for index, char in enumerate(results):
+        if char == '{' and index + 1 < len(results) and results[index + 1] in '{%#':
+            escaped.append('{ ')
+        else:
+            escaped.append(char)
+
+    return ''.join(escaped)
+
+
 def render_deploy_message(template_text, results):
     return (
         template_text
         .replace(RAW_START, '')
         .replace(RAW_END, '')
-        .replace(RESULTS_PLACEHOLDER, str(results))
+        .replace(RESULTS_PLACEHOLDER, escape_nunjucks_opening_delimiters(results))
     )
 
 

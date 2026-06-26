@@ -23,6 +23,19 @@ class RenderDeployMessageTest(unittest.TestCase):
         self.assertIn('{{ ref }}', rendered)
         self.assertIn('{{ environment }}', rendered)
 
+    def test_escapes_nunjucks_opening_delimiters_in_results(self):
+        rendered = render_deploy_message(
+            '[[ results ]]',
+            '{{ value }}\n{% if changed %}\n{# note #}',
+        )
+
+        self.assertIn('{ { value }}', rendered)
+        self.assertIn('{ % if changed %}', rendered)
+        self.assertIn('{ # note #}', rendered)
+        self.assertNotIn('{{ value }}', rendered)
+        self.assertNotIn('{% if changed %}', rendered)
+        self.assertNotIn('{# note #}', rendered)
+
 
 if __name__ == '__main__':
     unittest.main()
