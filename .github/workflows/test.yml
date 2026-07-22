@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: GrantBirki/fence@73584a435c4fbc54e7e60beeaddb078b350d6d68 # pin@v0.7.1
+      - uses: openai/fence@bbe8d131a54284a78390dbc2ce06893019830913 # pin@v0.8.4
         with:
           mode: audit
 
