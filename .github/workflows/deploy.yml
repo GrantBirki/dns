@@ -10,13 +10,13 @@ permissions:
 
 jobs:
   deployment-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs: # set outputs for use in downstream jobs
       continue: ${{ steps.deployment-check.outputs.continue }}
       sha: ${{ steps.deployment-check.outputs.sha }}
 
     steps:
-      - uses: openai/fence@bbe8d131a54284a78390dbc2ce06893019830913 # pin@v0.8.4
+      - uses: openai/fence@db291f5c51949e6e6ec1634621b36dc4bbf3d54a # pin@v0.8.7
         with:
           mode: audit
 
@@ -32,14 +32,14 @@ jobs:
     if: ${{ needs.deployment-check.outputs.continue == 'true' && github.event_name == 'push' }}
     needs: deployment-check
     environment: production
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency:
       group: dns-production
       cancel-in-progress: false
       queue: max
 
     steps:
-      - uses: openai/fence@bbe8d131a54284a78390dbc2ce06893019830913 # pin@v0.8.4
+      - uses: openai/fence@db291f5c51949e6e6ec1634621b36dc4bbf3d54a # pin@v0.8.7
         with:
           mode: audit
 
