@@ -145,7 +145,7 @@ jobs:
       - uses: grantbirki/octodns-action@21a241054238dfe984852b910ba7633bc1308b7d # pin@v1
         id: octodns
         with:
-          config_path: ${{ steps.working-path.outputs.working_dir }}/production.yaml
+          config_path: ${{ steps.trusted-path.outputs.trusted_dir }}/production.yaml
           doit: '--doit'
           poetry: false
         env:

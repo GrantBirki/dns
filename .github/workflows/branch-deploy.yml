@@ -196,7 +196,7 @@ jobs:
         id: octodns
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         with:
-          config_path: ${{ steps.working-path.outputs.working_dir }}/production.yaml
+          config_path: ${{ steps.trusted-path.outputs.trusted_dir }}/production.yaml
           doit: ${{ steps.noop-check.outputs.doit }}
           force: ${{ steps.force-check.outputs.force }}
           poetry: false
