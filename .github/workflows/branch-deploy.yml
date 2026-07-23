@@ -26,14 +26,14 @@ jobs:
       startsWith(github.event.comment.body, '.help') ||
       startsWith(github.event.comment.body, '.wcid') ||
       startsWith(github.event.comment.body, '.unlock')) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency:
       group: ${{ (startsWith(github.event.comment.body, '.deploy') || startsWith(github.event.comment.body, '.noop')) && 'dns-production' || format('branch-deploy-support-{0}', github.run_id) }}
       cancel-in-progress: false
       queue: max
 
     steps:
-      - uses: openai/fence@bbe8d131a54284a78390dbc2ce06893019830913 # pin@v0.8.4
+      - uses: openai/fence@db291f5c51949e6e6ec1634621b36dc4bbf3d54a # pin@v0.8.7
         with:
           mode: audit
 
