@@ -65,7 +65,7 @@ jobs:
 
       - name: branch-deploy
         id: branch-deploy
-        uses: github/branch-deploy@fded0351b6b79f854b335c11b3d93063461dd288 # pin@v11
+        uses: github/branch-deploy@ddf8ca48e9cdb2d2c7c71dee428308b19af9313f # pin@v11.1.4
         with:
           trigger: ".deploy"
           environment: production
@@ -103,7 +103,7 @@ jobs:
 
       - name: checkout trusted
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pin@v6
         with:
           ref: ${{ github.sha }}
           path: ${{ steps.trusted-path.outputs.trusted_dir }}
@@ -112,7 +112,7 @@ jobs:
 
       - name: checkout working deployment sha
         if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pin@v6
         with:
           ref: ${{ steps.branch-deploy.outputs.sha }}
           path: ${{ steps.working-path.outputs.working_dir }}

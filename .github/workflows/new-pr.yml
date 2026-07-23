@@ -18,7 +18,7 @@ jobs:
       - uses: openai/fence@db291f5c51949e6e6ec1634621b36dc4bbf3d54a # pin@v0.8.7
 
       # Comment on new PR requests with deployment instructions
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # pin@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pin@v6
         with:
           persist-credentials: false
 
