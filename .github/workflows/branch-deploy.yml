@@ -26,7 +26,7 @@ jobs:
       startsWith(github.event.comment.body, '.help') ||
       startsWith(github.event.comment.body, '.wcid') ||
       startsWith(github.event.comment.body, '.unlock')) }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ (startsWith(github.event.comment.body, '.deploy') || startsWith(github.event.comment.body, '.noop')) && 'dns-production' || format('branch-deploy-support-{0}', github.run_id) }}
       cancel-in-progress: false

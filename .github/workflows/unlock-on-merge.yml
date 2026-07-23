@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   unlock-on-merge:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
     steps:
