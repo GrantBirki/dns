@@ -14,8 +14,6 @@ jobs:
 
     steps:
       - uses: openai/fence@db291f5c51949e6e6ec1634621b36dc4bbf3d54a # pin@v0.8.7
-        with:
-          mode: audit
 
       - name: unlock on merge
         uses: github/branch-deploy@fded0351b6b79f854b335c11b3d93063461dd288 # pin@v11
