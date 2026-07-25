@@ -65,7 +65,7 @@ jobs:
 
       - name: branch-deploy
         id: branch-deploy
-        uses: github/branch-deploy@fded0351b6b79f854b335c11b3d93063461dd288 # pin@v11
+        uses: github/branch-deploy@f0984057ffe1aa340aa017b6eafb894310aed88e # pin@v12.0.0
         with:
           trigger: ".deploy"
           environment: production
@@ -73,7 +73,7 @@ jobs:
           production_environments: production
           sticky_locks: "true"
           admins: "GrantBirki"
-          deploy_message_path: ${{ steps.trusted-path.outputs.trusted_dir }}/.github/deployment_message.md
+          deploy_message_path: .github/deployment_message.md
           allow_forks: "false"
 
       - name: derive working checkout path
