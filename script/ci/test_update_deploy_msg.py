@@ -1,40 +1,44 @@
 import sys
 import unittest
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from update_deploy_msg import render_deploy_message
+from update_deploy_msg import write_deploy_message
 
 
-class RenderDeployMessageTest(unittest.TestCase):
-    def test_renders_results_without_consuming_branch_deploy_template(self):
-        template_path = Path(__file__).resolve().parents[2] / '.github' / 'deployment_message.md'
-        rendered = render_deploy_message(
-            template_path.read_text(encoding='utf-8'),
-            'planned changes',
-        )
+class WriteDeployMessageTest(unittest.TestCase):
+    def test_writes_results_without_preprocessing_template_syntax(self):
+        with TemporaryDirectory() as tmpdir:
+            github_env = Path(tmpdir) / 'github-env'
+            write_deploy_message(
+                github_env,
+                '{{ value }}\n{% if changed %}\n{# note #}',
+                delimiter_factory=lambda _length: '0' * 32,
+            )
 
-        self.assertNotIn('{% raw %}', rendered)
-        self.assertNotIn('{% endraw %}', rendered)
-        self.assertNotIn('[[ results ]]', rendered)
-        self.assertIn('planned changes', rendered)
-        self.assertIn('{{ actor }}', rendered)
-        self.assertIn('{{ ref }}', rendered)
-        self.assertIn('{{ environment }}', rendered)
+            self.assertEqual(
+                github_env.read_text(encoding='utf-8'),
+                'DEPLOY_MESSAGE<<branch_deploy_00000000000000000000000000000000\n'
+                '{{ value }}\n{% if changed %}\n{# note #}\n'
+                'branch_deploy_00000000000000000000000000000000\n',
+            )
 
-    def test_escapes_nunjucks_opening_delimiters_in_results(self):
-        rendered = render_deploy_message(
-            '[[ results ]]',
-            '{{ value }}\n{% if changed %}\n{# note #}',
-        )
+    def test_retries_when_delimiter_collides_with_result_line(self):
+        delimiters = iter(['a' * 32, 'b' * 32])
+        with TemporaryDirectory() as tmpdir:
+            github_env = Path(tmpdir) / 'github-env'
+            write_deploy_message(
+                github_env,
+                'branch_deploy_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                delimiter_factory=lambda _length: next(delimiters),
+            )
 
-        self.assertIn('{ { value }}', rendered)
-        self.assertIn('{ % if changed %}', rendered)
-        self.assertIn('{ # note #}', rendered)
-        self.assertNotIn('{{ value }}', rendered)
-        self.assertNotIn('{% if changed %}', rendered)
-        self.assertNotIn('{# note #}', rendered)
+            self.assertIn(
+                'DEPLOY_MESSAGE<<branch_deploy_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                github_env.read_text(encoding='utf-8'),
+            )
 
 
 if __name__ == '__main__':

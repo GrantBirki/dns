@@ -1,45 +1,35 @@
 import os
+import secrets
 from pathlib import Path
 
-TEMPLATE_FILE = Path('.github/deployment_message.md')
-RAW_START = '{% raw %}'
-RAW_END = '{% endraw %}'
-RESULTS_PLACEHOLDER = '[[ results ]]'
+DEFAULT_RESULTS = 'No deployment results were captured.'
 
 
-def escape_nunjucks_opening_delimiters(results):
-    escaped = []
-    results = str(results)
+def write_deploy_message(github_env, results, delimiter_factory=secrets.token_hex):
+    results = str(results or DEFAULT_RESULTS)
+    result_lines = set(results.splitlines())
 
-    for index, char in enumerate(results):
-        if char == '{' and index + 1 < len(results) and results[index + 1] in '{%#':
-            escaped.append('{ ')
-        else:
-            escaped.append(char)
+    while True:
+        delimiter = f'branch_deploy_{delimiter_factory(16)}'
+        if delimiter not in result_lines:
+            break
 
-    return ''.join(escaped)
-
-
-def render_deploy_message(template_text, results):
-    return (
-        template_text
-        .replace(RAW_START, '')
-        .replace(RAW_END, '')
-        .replace(RESULTS_PLACEHOLDER, escape_nunjucks_opening_delimiters(results))
-    )
+    with Path(github_env).open('a', encoding='utf-8') as env_file:
+        env_file.write(f'DEPLOY_MESSAGE<<{delimiter}\n')
+        env_file.write(results)
+        if not results.endswith('\n'):
+            env_file.write('\n')
+        env_file.write(f'{delimiter}\n')
 
 
 def main():
-    results = os.environ.get('MSG', False)
-    rendered_template = render_deploy_message(
-        TEMPLATE_FILE.read_text(encoding='utf-8'),
-        results,
-    )
+    results = os.environ.get('MSG', DEFAULT_RESULTS)
+    github_env = os.environ.get('GITHUB_ENV')
 
-    print(rendered_template)
+    if not github_env:
+        raise RuntimeError('GITHUB_ENV is required')
 
-    if os.environ.get('GITHUB_ACTIONS', False):
-        TEMPLATE_FILE.write_text(rendered_template, encoding='utf-8')
+    write_deploy_message(github_env, results)
 
 
 if __name__ == '__main__':
