@@ -11,7 +11,7 @@ DNS management through [octodns](https://github.com/octodns/octodns).
 
 ## About 💡
 
-This repository is used to manage DNS records for various domains. `octodns` is used to manage all DNS records through Infrastructure as Code (IaC) principles. The [github/branch-deploy](https://github.com/github/branch-deploy) is responsible for deploying changes to production.
+This repository is used to manage DNS records for various domains. `octodns` is used to manage all DNS records through Infrastructure as Code (IaC) principles. The [grantbirki/branch-deploy](https://github.com/grantbirki/branch-deploy) action is responsible for deploying changes to production.
 
 ## Development Workflow 🧰
 
@@ -53,7 +53,7 @@ The `vendor/cache` directory is committed to the repository so the project can b
 
 ## Deployment Process 🚀
 
-This repository uses IssueOps via the [github/branch-deploy](https://github.com/github/branch-deploy) action to deploy changes to production. This ensure that all changes safely follow the [branch deploy model](https://blog.birki.io/posts/branch-deploy/).
+This repository uses IssueOps via the [grantbirki/branch-deploy](https://github.com/grantbirki/branch-deploy) action to deploy changes to production. This ensures that all changes safely follow the [branch deploy model](https://blog.birki.io/posts/branch-deploy/).
 
 Here is a trimmed down summary of the deployment process:
 
