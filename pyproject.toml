@@ -11,4 +11,4 @@ dependencies = [
 
 [tool.uv]
 package = false
-exclude-newer = "21 days"
+exclude-newer = "7 days"

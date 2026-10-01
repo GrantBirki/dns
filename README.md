@@ -43,7 +43,7 @@ Dependency updates are intentionally explicit. Refresh the lockfiles and vendore
 script/vendor
 ```
 
-Update all resolvable Python dependencies within uv's configured `exclude-newer` cutoff with:
+Update all resolvable Python dependencies within uv's configured 7-day `exclude-newer` cutoff with:
 
 ```bash
 script/vendor --upgrade
