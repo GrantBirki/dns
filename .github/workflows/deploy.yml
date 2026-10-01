@@ -16,7 +16,7 @@ jobs:
       sha: ${{ steps.deployment-check.outputs.sha }}
 
     steps:
-      - uses: openai/fence@c22db5d5c19f83d1d7b40e9def37a7a6099bbca2 # pin@v0.8.10
+      - uses: openai/fence@e6b39c80c51cb2b2a39448ddeff74b3b886c0a63 # pin@v0.10.0
 
       # https://github.com/github/branch-deploy/blob/d3c24bd92505e623615b75ffdfac5ed5259adbdb/docs/merge-commit-strategy.md
       - name: deployment check
@@ -37,7 +37,7 @@ jobs:
       queue: max
 
     steps:
-      - uses: openai/fence@c22db5d5c19f83d1d7b40e9def37a7a6099bbca2 # pin@v0.8.10
+      - uses: openai/fence@e6b39c80c51cb2b2a39448ddeff74b3b886c0a63 # pin@v0.10.0
         with:
           allowlist: |
             hostname pypi.org tcp 443
@@ -132,7 +132,7 @@ jobs:
           echo "trusted checkout: ${TRUSTED_DIR}@${trusted_head}"
           echo "working checkout: ${WORKING_DIR}@${working_head}"
 
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # pin@v6
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # pin@v7.0.0
         with:
           python-version-file: ${{ steps.trusted-path.outputs.trusted_dir }}/.python-version
 
