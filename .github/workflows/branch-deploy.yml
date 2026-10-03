@@ -12,6 +12,8 @@ permissions:
   checks: read
   statuses: read
 
+cache-mode: none
+
 jobs:
   branch-deploy:
     name: branch-deploy
